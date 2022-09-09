@@ -1,8 +1,9 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+import { supabase } from '../lib/supabaseClient'
 
-export default function Home() {
+export default function Mesas({res}) {
   return (
     <div className={styles.container}>
       <Head>
@@ -12,12 +13,21 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to restApp!!!
-        </h1>
+        <h1 className={styles.title}>Listado de mesas:</h1>
+        <div>{JSON.stringify(res, null, 2)}</div>
       </main>
 
       <footer className={styles.footer}></footer>
     </div>
   )
 }
+
+export async function getStaticProps () {
+    let { data: res, error } = await supabase.from('rest_mesas').select('*')
+    return {
+        props: {
+            res
+        }
+    }
+  }
+  
